@@ -21,10 +21,13 @@
   },
   "homepage": "https://github.com/RobertChristopher/yw-bot#readme",
   "dependencies": {
+    "async": "^1.5.2",
     "bluebird": "^3.3.1",
+    "cheerio": "^0.20.0",
     "gulp": "^3.9.1",
     "gulp-mocha": "^2.2.0",
     "gulp-watch": "^4.3.5",
+    "qs": "^6.1.0",
     "requestretry": "^1.6.0"
   },
   "devDependencies": {
