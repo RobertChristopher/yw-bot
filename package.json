@@ -4,8 +4,8 @@
   "description": "yw bot",
   "main": "app.js",
   "scripts": {
-    "test": "mocha -w",
-    "start":"node ./bin/init.js"
+    "test": "gulp watch",
+    "start": ""
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,10 @@
   "bugs": {
     "url": "https://github.com/RobertChristopher/yw-bot/issues"
   },
-  "homepage": "https://github.com/RobertChristopher/yw-bot#readme"
+  "homepage": "https://github.com/RobertChristopher/yw-bot#readme",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-mocha": "^2.2.0",
+    "gulp-watch": "^4.3.5"
+  }
 }
