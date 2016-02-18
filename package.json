@@ -1,0 +1,23 @@
+{
+  "name": "yw-bot",
+  "version": "1.0.0",
+  "description": "yw bot",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha -w",
+    "start":"node ./bin/init.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RobertChristopher/yw-bot.git"
+  },
+  "keywords": [
+    "yw"
+  ],
+  "author": "ROB",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RobertChristopher/yw-bot/issues"
+  },
+  "homepage": "https://github.com/RobertChristopher/yw-bot#readme"
+}
