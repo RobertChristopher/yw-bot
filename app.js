@@ -21,20 +21,20 @@ var size = 9
 
 
 
-//prompt.start();
+prompt.start();
 
-//prompt.get(['username', 'password', 'country', 'product_id', 'size'], function (err, result) {
-//  if (err) { return }
- // console.log('Processing...');
-  //username = result.username
- // password = result.password
-  //country = result.country
- // product_id = result.product_id
- //size = result.size
+prompt.get(['username', 'password', 'country', 'product_id', 'size'], function (err, result) {
+  if (err) { return }
+  console.log('Processing...');
+  username = result.username
+  password = result.password
+  country = result.country
+  product_id = result.product_id
+  size = result.size
 
  //* start bot */
- // start()
-//});
+  start()
+});
 
 
 
@@ -86,9 +86,9 @@ var start = function () {
         process.exit()
       } else {
         console.log("Could not add item to cart")
+        process.exit()
       }
     })
   })
 }
 
-start()
