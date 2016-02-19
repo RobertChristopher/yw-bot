@@ -75,11 +75,13 @@ function waterfall (username, password, country, done) {
 
       /* Make a request to the adidas sign in page.
       We need to retrieve the CSRF form token */
+
       function (next) {
         Agent({
           url: server.sign_in_page,
           method: 'GET',
           jar: jar,
+          proxy: Agent.proxy(country),
           maxAttempts: request_retry_attempts,   // (default) try 5 times 
           retryDelay: request_retry_delay,  // (default) wait for 5s before trying again 
           retryStrategy: request_retry_scenario, // (default
@@ -100,19 +102,19 @@ function waterfall (username, password, country, done) {
       /* Start the SSO session and obtain
       the redirect url */
       function start_sso_session (next) {
-        var _body = get_request_body(username, password, 'US')
+        var _body = get_request_body(username, password, country)
         _body.CSRFToken = csrf
         Agent({
           url: server.start_sso_session,
           method: 'POST',
           jar: jar,
+          proxy: Agent.proxy(country),
           maxAttempts: request_retry_attempts,   // (default) try 5 times 
           retryDelay: request_retry_delay,  // (default) wait for 5s before trying again 
           retryStrategy: request_retry_scenario, // (default
           headers: headers,
           body: qs.stringify(_body)
         }, function (error, response, body) {
-          
           if(response.headers['location']) {
             if(response.headers['location'].indexOf("loadsignin") > -1) {
               return done({
@@ -144,6 +146,7 @@ function waterfall (username, password, country, done) {
           url: redirect_url,
           method: 'GET',
           jar: jar,
+          proxy: Agent.proxy(country),
           followAllRedirects: true,
           maxAttempts: request_retry_attempts,   // (default) try 5 times 
           retryDelay: request_retry_delay,  // (default) wait for 5s before trying again 
@@ -171,7 +174,8 @@ function waterfall (username, password, country, done) {
         Agent({
           url: server.create_sso_domain_cookie,
           method: 'GET',
-            maxAttempts: request_retry_attempts,   // (default) try 5 times 
+          proxy: Agent.proxy(country),
+          maxAttempts: request_retry_attempts,   // (default) try 5 times 
           retryDelay: request_retry_delay,  // (default) wait for 5s before trying again 
           retryStrategy: request_retry_scenario, // (default
           jar: jar,
@@ -197,12 +201,13 @@ function waterfall (username, password, country, done) {
           url: server.cp_resume + resume,
           method: 'GET',
           jar: jar,
+          proxy: Agent.proxy(country),
           maxAttempts: request_retry_attempts,   // (default) try 5 times 
           retryDelay: request_retry_delay,  // (default) wait for 5s before trying again 
           retryStrategy: request_retry_scenario, // (default
           headers: headers,
         }, function (error, response, body) {
-          if(error || response.statusCode !== 200) {
+          if(error || response.statusCode !== 200) {            
             return _login()
           }
 
@@ -222,6 +227,7 @@ function waterfall (username, password, country, done) {
           url: server.cp_saml,
           method: 'POST',
           jar: jar,
+          proxy: Agent.proxy(country),
           maxAttempts: request_retry_attempts,   // (default) try 5 times 
           retryDelay: request_retry_delay,  // (default) wait for 5s before trying again 
           retryStrategy: request_retry_scenario, // (default
@@ -254,6 +260,7 @@ function waterfall (username, password, country, done) {
           url: server.resume_login,
           method: 'POST',
           jar: jar,
+          proxy: Agent.proxy(country),
           headers: headers,
           maxAttempts: request_retry_attempts,   // (default) try 5 times 
           retryDelay: request_retry_delay,  // (default) wait for 5s before trying again 
@@ -284,22 +291,11 @@ function waterfall (username, password, country, done) {
           url: server.my_account,
           method: 'GET',
           jar: jar,
-          maxAttempts: request_retry_attempts,   // (default) try 5 times 
-          retryDelay: request_retry_delay,  // (default) wait for 5s before trying again 
-          retryStrategy: request_retry_scenario, // (default
+          proxy: Agent.proxy(country),
           followRedirect: false,
           headers: headers
         }, function (error, response, body) {
-          
-          if(error || response.statusCode !== 200) {
-            return _login()
-          }
-
-          if(response.headers.location)
-            return done(false)
-          
-          done(true)
-        
+          done(true)        
         })
       }
 
@@ -324,7 +320,7 @@ function get_server_url (country) {
     cp_saml: 'https://cp.adidas.' + server[country] + '/sp/ACS.saml2',
     resume_login: 'https://www.adidas.' + server[country] + '/on/demandware.store/Sites-adidas-' + country + '-Site/en_' + country + '/MyAccount-ResumeLogin',
     target_resource: 'https://www.adidas.' + server[country] + '/on/demandware.store/Sites-adidas-' + country + '-Site/en_' + country +'/MyAccount-ResumeLogin?target=account&target=account',
-    my_account: 'https://www.adidas.' + server[country] + '/us/myaccount-show?fromlogin=true',
+    my_account: 'https://www.adidas.' + server[country] + '/on/demandware.store/Sites-adidas-' + country + '-Site/en_' + country + '/MyAccount-Show?fromlogin=true',
     relay_state: 'https://www.adidas.' + server[country] + '/on/demandware.store/Sites-adidas-' + country + '-Site/en_' + country + '/MyAccount-ResumeLogin?target=account&target=account'
   }
 }
