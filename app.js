@@ -12,6 +12,10 @@ app.get('/us', function (req, res, next) {
   res.sendfile('views/us.html')
 })
 
+app.get('/uk', function (req, res, next) {
+  res.sendfile('views/uk.html')
+})
+
 var username = "turninhomework@yahoo.com"
 var password = "Danny123"
 var country = "US"
