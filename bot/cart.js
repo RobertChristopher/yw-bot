@@ -75,14 +75,14 @@ var add = (function (variant, country, captcha_res) {
     ( correct response status back but something still went wrong )
   */
   var attempts = 0;
-  var attempt_limit = 10;
+  var attempt_limit = 5000;
   var cart_interval = 2000
 
   /* request retry configuration 
     ( server is down or internal server error)
   */
 
-  var request_retry_attempts = 5
+  var request_retry_attempts = 1000
   var request_retry_delay = 5000
   var request_retry_scenario = Agent.RetryStrategies.HTTPOrNetworkError
   
@@ -110,7 +110,7 @@ var add = (function (variant, country, captcha_res) {
     async.waterfall([
       function (next) {
         Agent({
-          url:  create_production_cart_link(country),
+          url:  create_cart_link(country),
           method: 'POST',
           jar: jar,
           body: req_body,
